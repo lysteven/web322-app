@@ -6,7 +6,7 @@ I declare that this assignment is my own work in accordance with Seneca  Academi
 Name: Steven Ly
 Student ID: 101444214
 Date: October 07 2024
-Cyclic Web App URL: _______________________________________________________
+Glitch Web App URL: https://spiny-hulking-willow.glitch.me/
 GitHub Repository URL: https://github.com/lysteven/web322-app
 
 ********************************************************************************/ 
