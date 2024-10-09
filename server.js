@@ -25,7 +25,7 @@ function onHttpStart () {
 }
 
 app.get("/", (req,res) => {
-    res.direct('/about');
+    res.redirect('/about');
 });
 
 app.get("/about", (req,res) => {
@@ -34,7 +34,7 @@ app.get("/about", (req,res) => {
 
 
 app.get("/shop", (req, res) => {
-        storeservice.getItems().then((items) => {
+        storeservice.getPublishedItems().then((items) => {
             const publishedItems = items.filter(item => item.published);
             res.json(publishedItems);
         }).catch((err) => {
@@ -43,7 +43,7 @@ app.get("/shop", (req, res) => {
     });
 
 app.get("/items", (req, res) => {
-    storeservice.getItems().then((items) => {
+    storeservice.getAllitemss().then((items) => {
         res.json(items);
     }).catch((err) => {
         res.json( {message: err});
