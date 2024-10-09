@@ -7,7 +7,7 @@ Name: Steven Ly
 Student ID: 101444214
 Date: October 07 2024
 Cyclic Web App URL: _______________________________________________________
-GitHub Repository URL: ______________________________________________________
+GitHub Repository URL: https://github.com/lysteven/web322-app
 
 ********************************************************************************/ 
 
