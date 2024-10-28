@@ -48,5 +48,49 @@ module.exports = {
                 resolve(this.categories);
             }
         });
+    },
+    addItem: function (itemData) {
+        return new Promise((resolve, reject) => {
+            if (itemData.published == undefined) {
+                itemData.published = false;
+            } else {
+                itemData.published = true;
+            }
+            itemData.id = this.items.length + 1;
+            itemData.push(itemData);
+
+            resolve(true);
+        });
+    },
+    getItemsByCategory: function (category) {
+        return new Promise((resolve, reject) => {
+            let itemsByCategory = this.items.filter(q => q.category == category);
+            if (!filtered.length) {
+                reject("no results returned");
+            } else {
+                resolve(filtered);
+            }
+        });
+    },
+    getItemsByMinDate: function (minDateStr) {
+        return new Promise((resolve, reject) => {
+            let minDate = new Date(minDateStr);
+            let filtered = items.filter(q => new Date(q.date) >= minDate);
+            if (!filtered.length) {
+                reject("no results returned");
+            } else {
+                resolve(filtered);
+            }
+        });
+    },
+    getItemsById: function (id) {
+        return new Promise((resolve, reject) => {
+            let filtered = items.filter(q => q.id == id);
+            if (!filtered.length) {
+                reject("no results returned");
+            } else {
+                resolve(filtered);
+            }
+        });
     }
 }
