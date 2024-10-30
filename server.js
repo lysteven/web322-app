@@ -21,7 +21,8 @@ const path = require('path');
 app.use(express.static('public'));
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
-const streamifer = require('streamifier');
+const streamifier = require('streamifier');
+const storeService = require("./store-service");
 const upload = multer();
 
 cloudinary.config({
@@ -77,6 +78,10 @@ if(req.file){
 function processItem(imageUrl){
     req.body.featureImage = imageUrl;
 
+    storeservice.addItem(req.body).then((items) => {
+        res.redirect('/items');
+    });
+
     // TODO: Process the req.body and add it as a new Item before redirecting to /items
 } 
 
@@ -91,11 +96,19 @@ app.get("/shop", (req, res) => {
     });
 
 app.get("/items", (req, res) => {
-    storeservice.getAllitemss().then((items) => {
-        res.json(items);
-    }).catch((err) => {
-        res.json( {message: err});
-    });
+    if (req.query.minDate) {
+        storeservice.getPostsByMinDate(req.query.minDate).then((posts) => {
+            res.json(posts);
+        }).catch((err) => {
+            res.json( {message: err});
+        });
+    } else {
+        storeservice.getAllitems().then((items) => {
+            res.json(items);
+        }).catch((err) => {
+            res.json( {message: err});
+        });
+    }
 });
 
 app.get("/items/add", (req, res) => {

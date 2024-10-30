@@ -21,7 +21,7 @@ module.exports = {
             });
         });
     },
-    getAllitemss: function () {
+    getAllitems: function () {
         return new Promise((resolve, reject) => {
             if (!this.items.length) {
                 reject("no results returned");
@@ -57,7 +57,7 @@ module.exports = {
                 itemData.published = true;
             }
             itemData.id = this.items.length + 1;
-            itemData.push(itemData);
+            this.items.push(itemData);
 
             resolve(true);
         });
