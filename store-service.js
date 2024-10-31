@@ -74,8 +74,9 @@ module.exports = {
     },
     getItemsByMinDate: function (minDateStr) {
         return new Promise((resolve, reject) => {
-            let minDate = new Date(minDateStr);
-            let filtered = items.filter(q => new Date(q.date) >= minDate);
+            let filtered = this.items.filter(q => new Date(q.postDate) >=  new Date(minDateStr));{
+                console.log("The postDate value is greater than minDateStr")
+            }
             if (!filtered.length) {
                 reject("no results returned");
             } else {
@@ -83,10 +84,10 @@ module.exports = {
             }
         });
     },
-    getItemsById: function (id) {
+    getItemById: function (id) {
         return new Promise((resolve, reject) => {
-            let filtered = items.filter(q => q.id == id);
-            if (!filtered.length) {
+            let filtered = this.items.find(q => q.id == id);
+            if (!filtered) {
                 reject("no results returned");
             } else {
                 resolve(filtered);

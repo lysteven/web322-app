@@ -88,7 +88,6 @@ function processItem(imageUrl){
 })
 app.get("/shop", (req, res) => {
         storeservice.getPublishedItems().then((items) => {
-            const publishedItems = items.filter(item => item.published);
             res.json(publishedItems);
         }).catch((err) => {
             res.json({ message: err });
@@ -96,7 +95,13 @@ app.get("/shop", (req, res) => {
     });
 
 app.get("/items", (req, res) => {
-    if (req.query.minDate) {
+    if(req.query.category){
+        storeservice.getItemsByCategory(req.query.category).then((items) => {
+            res.json(items);
+        }).catch((err) => {
+            res.json( {message: err});
+        });
+    } else if (req.query.minDate) {
         storeservice.getItemsByMinDate(req.query.minDate).then((posts) => {
             res.json(posts);
         }).catch((err) => {
@@ -113,6 +118,13 @@ app.get("/items", (req, res) => {
 
 app.get("/items/add", (req, res) => {
     res.sendFile(path.join(__dirname, '/views/addItem.html'));
+});
+app.get("/item/:id", (req, res) => {
+    storeservice.getItemById(req.params.id).then((post) => {
+        res.json(post);
+    }).catch((err) => {
+        res.json({message: err});
+    });
 });
 
 app.get("/categories", (req, res) => {
