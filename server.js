@@ -80,6 +80,8 @@ function processItem(imageUrl){
 
     storeservice.addItem(req.body).then((items) => {
         res.redirect('/items');
+    }).catch((err) => {
+        res.json({message: err});   
     });
 
     // TODO: Process the req.body and add it as a new Item before redirecting to /items
@@ -88,7 +90,7 @@ function processItem(imageUrl){
 })
 app.get("/shop", (req, res) => {
         storeservice.getPublishedItems().then((items) => {
-            res.json(publishedItems);
+            res.json(items);
         }).catch((err) => {
             res.json({ message: err });
         });
@@ -102,8 +104,8 @@ app.get("/items", (req, res) => {
             res.json( {message: err});
         });
     } else if (req.query.minDate) {
-        storeservice.getItemsByMinDate(req.query.minDate).then((posts) => {
-            res.json(posts);
+        storeservice.getItemsByMinDate(req.query.minDate).then((items) => {
+            res.json(items);
         }).catch((err) => {
             res.json( {message: err});
         });
@@ -120,8 +122,8 @@ app.get("/items/add", (req, res) => {
     res.sendFile(path.join(__dirname, '/views/addItem.html'));
 });
 app.get("/item/:id", (req, res) => {
-    storeservice.getItemById(req.params.id).then((post) => {
-        res.json(post);
+    storeservice.getItemById(req.params.id).then((item) => {
+        res.json(item);
     }).catch((err) => {
         res.json({message: err});
     });
