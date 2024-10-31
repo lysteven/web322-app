@@ -64,7 +64,7 @@ module.exports = {
     },
     getItemsByCategory: function (category) {
         return new Promise((resolve, reject) => {
-            let itemsByCategory = this.items.filter(q => q.category == category);
+            let filtered = items.filter(q => q.category == category);
             if (!filtered.length) {
                 reject("no results returned");
             } else {
@@ -74,7 +74,7 @@ module.exports = {
     },
     getItemsByMinDate: function (minDateStr) {
         return new Promise((resolve, reject) => {
-            let filtered = this.items.filter(q => new Date(q.postDate) >=  new Date(minDateStr));{
+            let filtered = items.filter(q => new Date(q.postDate) >=  new Date(minDateStr));{
                 console.log("The postDate value is greater than minDateStr")
             }
             if (!filtered.length) {
