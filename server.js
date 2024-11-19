@@ -12,17 +12,17 @@ GitHub Repository URL: https://github.com/lysteven/web322-app
 ********************************************************************************/ 
 
 
-const express = require('express');
-const storeService = require('./store-service');
-const multer = require("multer");
-const cloudinary = require('cloudinary').v2;
-const streamifier = require('streamifier');
-const exphbs = require('express-handlebars');
-const Handlebars = require('handlebars');  // Import Handlebars directly
-const PORT = process.env.PORT || 8080;
-const upload = multer();
-const app = express();
-cloudinary.config({
+const express = require('express'); // Imports the express module
+const storeService = require('./store-service'); // Imports the store-service module
+const multer = require("multer"); // Imports the multer module
+const cloudinary = require('cloudinary').v2;// Imports the cloudinary module
+const streamifier = require('streamifier'); // Imports the streamifier module
+const exphbs = require('express-handlebars'); // Imports the express-handlebars module
+const Handlebars = require('handlebars');  // Imports Handlebars directly from the Handlebars module 
+const PORT = process.env.PORT || 8080; // Sets the port to 8080
+const upload = multer(); // Sets the upload variable to the multer module
+const app = express();// Sets the app variable to the express module
+cloudinary.config({ // Configures the cloudinary module with the cloud_name, api_key, api_secret, and secure properties
     cloud_name: 'djjdy3gyf',
     api_key: '915157472213428',
     api_secret: 'A0kol7FdiyFNSz9btX_m4gp9VIQ',
