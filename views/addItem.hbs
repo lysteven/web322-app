@@ -17,11 +17,11 @@
     </fieldset>
     <br />
     <fieldset>
-      <legend>Post Content</legend>
+      <legend>Store Content</legend>
       <div class="row">
         <div class="col-md-12">
           <div class="form-group">
-            <label for="title">Item Name:</label>
+            <label for="title">Title:</label>
             <input class="form-control" id="title" name="title" type="text" />
           </div>
         </div>
@@ -48,19 +48,23 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label for="category">Category:</label>
-            <select class="form-control" name="category" id="category">
-              <option value="1">Home, Garden</option>
-              <option value="2">Electronics, Computers, Video Games</option>
-              <option value="3">Clothing</option>
-              <option value="4">Sports & Outdoors</option>
-              <option value="5">Pets</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-6">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            {{#if categories}}
+                                <select class="form-control" name="category" id="category">
+                                    <option value="">Select Category</option>
+                                    {{#each categories}}
+                                        <option value="{{id}}">{{category}}</option>
+                                    {{/each}}
+                                </select>
+                            {{else}}
+                                <div>No Categories</div>
+                            {{/if}}
+
+                        </div>
+                                </div>
+                    <div class="col-md-6">
           <div class="form-group">
             <label for="category">Visibility:</label>
             <div class="checkbox">

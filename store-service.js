@@ -1,87 +1,184 @@
-const fs = require("fs").promises; // uses fs.promises API for more oganized async/await
-
-let items = [];
-let categories = [];
+const Sequelize = require('sequelize');
+var sequelize = new Sequelize('Web322', 'Web322_owner', 'MWR1SNhxj5ks', {
+    host: 'ep-withered-mountain-a4u9gunz.us-east-1.aws.neon.tech',
+    dialect: 'postgres',
+    port: 5432,
+    dialectOptions: {
+        ssl: { rejectUnauthorized: false }
+    },
+    query: { raw: true }
+});
+var Store = sequelize.define('Store', {
+    body: Sequelize.TEXT,
+    title: Sequelize.STRING,
+    postDate: Sequelize.DATE,
+    featureImage: Sequelize.STRING,
+    published: Sequelize.BOOLEAN,
+    price: Sequelize.DOUBLE,
+});
+var Category = sequelize.define('Category', {
+    category: Sequelize.STRING
+});
+Store.belongsTo(Category, {foreignKey: 'category'});
+const { gte } = Sequelize.Op;
 
 
 module.exports = { // Export the store service object with methods for data access and manipulation
      initialize: async function() {
-        try {
-            const itemsData = await fs.readFile('./data/items.json', 'utf8'); // Read the items.json file as a string
-            items = JSON.parse(itemsData);
-            console.log("Items loaded:", items);
-            const categoriesData = await fs.readFile('./data/categories.json', 'utf8');
-            categories = JSON.parse(categoriesData);
-        } catch (err) {
-            throw new Error("Unable to initialize data, please check the server console: " + err.message);
-        }
+        return new Promise((resolve, reject) => {
+            sequelize.sync().then(function () {
+                resolve();
+            }).catch(function (error) {
+                reject("unable to sync the database");
+            });
+        });
     },
 
     addItem: async function (itemData) { // Add a new item to the items array and save it to the items.json file 
-        try {
-            const currentDate = new Date();
-            const postDate = currentDate.toISOString().split("T")[0];
-            itemData.postDate = postDate;
-            
-            
-            itemData.id = items.length > 0 ? Math.max(...items.map(item => item.id)) + 1 : 1; 
-
-            items.push(itemData);
-
-            
-            await fs.writeFile("./data/items.json", JSON.stringify(items, null, 2));
-
-            return itemData;
-        } catch (err) {
-            throw new Error("Error saving the new item, please check the server console: " + err.message);
-        }
+        return new Promise((resolve, reject) => {
+            for (var prop in itemData) {
+                if (itemData[prop] === "") itemData[prop] = null;
+            }
+            Store.create(itemData).then(function () {
+                resolve();
+            }).catch(function (error) {
+                reject("unable to create item");
+            });
+        });
     },
 
     getAllItems: async function() { // Get all items from the items array 
-        if (items.length === 0) {
-            throw new Error("No items available, please check the server console");
-        }
-        return items;
+        return new Promise((resolve, reject) => {
+            Store.findAll().then(function (data) {
+                resolve(data);
+            }).catch(function (error) {
+                reject("no results returned");
+            });
+        });
     },
 
     getPublishedItems: async function() { // Get all published items from the items array 
-        const publishedItems = items.filter(item => item.published === true); // converts the category to a number 
-        if (publishedItems.length === 0) {
-            throw new Error("No published items found, please check the server console");
-        }
-        return publishedItems;
+        return new Promise((resolve, reject) => {
+            Store.findAll({
+                where: {
+                    published: true
+                }
+            }).then(function (data) {
+                resolve(data);
+            }).catch(function (error) {
+                reject("no results returned");
+            });
+        });
     },
     
     getPublishedItemsByCategory: async function(category) {
-        return items.filter(item => item.category === Number(category) && item.published === true); // converts the category to a number 
+    return new Promise((resolve, reject) => {
+        Store.findAll({
+            where: {
+                published: true,
+                category: category
+            }
+        }).then(function (data) {
+            resolve(data);
+        }).catch(function (error) {
+            reject("no results returned");
+        });
+    });
     },
     getCategories: async function() {
-        if (categories.length === 0) { // Check if the categories array is empty 
-            throw new Error("No categories found, please check the server console");
-        }
-        return categories;
+        return new Promise((resolve, reject) => {
+            Category.findAll().then(function (data) {
+                resolve(data);
+            }).catch(function (error) {
+                reject("no results returned");
+            });
+        });
     },
     getItemsByCategory: async function(category) {
-        const filteredItems = items.filter(item => item.category === category); // converts the category to a number 
-        if (filteredItems.length === 0) {
-            throw new Error(`No items found for category, please check the server console: ${category}`);
-        }
-        return filteredItems;
+        return new Promise((resolve, reject) => {
+            Store.findAll({
+                where: {
+                    category: category
+                }
+            }).then(function (data) {
+                resolve(data);
+            }).catch(function (error) {
+                reject("no results returned");
+            });
+        });
     },
 
     getItemsByMinDate: async function(minDateStr) {
-        const filteredItems = items.filter(item => new Date(item.postDate) >= new Date(minDateStr)); // converts the minDateStr to a Date object 
-        if (filteredItems.length === 0) {
-            throw new Error(`No items found with date after, please cgheck the server console: ${minDateStr}`);
-        }
-        return filteredItems;
+    return new Promise((resolve, reject) => {
+        Store.findAll({
+            where: {
+                postDate: {
+                    [gte]: new Date(minDateStr)
+                }
+            }
+        }).then(function (data) {
+            resolve(data);
+        }).catch(function (error) {
+            reject("no results returned");
+        });
+    });
     },
 
     getItemById: async function(id) {
-        const item = items.find(item => item.id === Number(id)); // converts the id to a number 
-        if (!item) {
-            throw new Error(`No item found with id, please check the server console: ${id}`);
-        }
-        return item;
+    return new Promise((resolve, reject) => {
+        Store.findAll({
+            where: {
+                id: id
+            }
+        }).then(function (data) {
+            resolve(data[0]);
+        }).catch(function (error) {
+            reject("no results returned");
+        });
+    });
     },
-};
+    addCategory: async function (categoryData) {
+        for (const prop in categoryData) {
+            if (categoryData[prop] === "") {
+                categoryData[prop] = null;
+            }
+        }
+        return new Promise((resolve, reject) => {
+            Category.create(categoryData).then(function () {
+                resolve();
+            }).catch(function (error) {
+                reject("unable to create category");
+            });
+        });
+    },
+    deleteCategoryById: async function (id) {
+        return new Promise((resolve, reject) => {
+            Category.destroy({
+                where: {
+                    id: id,
+                }
+            }).then(function (rowsDeleted) {
+                if (rowsDeleted > 0) {
+                    resolve();
+                } else {
+                    reject("Category not found");
+                }
+            }).catch(function (error) {
+                reject("unable to delete category");
+            });
+        });
+    },
+    deletePostById: async function (id) {
+        return new Promise((resolve, reject) => {
+            Post.destroy({
+                where: {
+                    id: id,
+                }
+            }).then(function () {
+                resolve();
+            }).catch(function (error) {
+                reject();
+            });
+        });
+    }
+}
