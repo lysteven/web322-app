@@ -80,7 +80,7 @@ app.get('/About', (req, res) => { // Define a route for the "/About" endpoint
 });
 
 app.get('/items/add', (req, res) => { // Define a route for the "/items/add" endpoint
-    storeservice.getCategories().then((data) => {
+    storeService.getCategories().then((data) => {
         res.render('addPost', {categories: data});
     }).catch((err) => {
         res.render('addPost', {categories: []});
@@ -117,7 +117,7 @@ app.get("/Shop", async (req, res) => { // Define a route for the "/Shop" endpoin
 });
 
 app.get('/Shop/:id', async (req, res) => { 
-    storeservice.getPostById(req.params.id).then((post) => {
+    storeService.getPostById(req.params.id).then((post) => {
         res.json(post);
     }).catch((err) => {
         res.json({message: err});
@@ -142,7 +142,7 @@ app.get('/item/:value', (req, res) => { // Define a route for the "/item/:value"
         .catch(err => res.status(404).json({ message: err }));
 });
 app.get("/categories", (req, res) => {
-    storeservice.getCategories().then((data) => {
+    storeService.getCategories().then((data) => {
         if (data.length)
             res.render("categories", {categories: data});
         else
@@ -165,7 +165,7 @@ app.get("/categories/delete/:id", (req, res) => {
 });
 
 app.get("/Items/delete/:id", (req, res) => {
-    storeservice.deletePostById(req.params.id).then(() => {
+    storeService.deletePostById(req.params.id).then(() => {
         res.redirect('/Items');
     }).catch((err) => {
         res.send("Unable to Remove Post / Post not found)", 500);
@@ -229,7 +229,7 @@ storeService.initialize()
         console.log('Failed to initialize the store service, Please check the server console.', err);
     });
 app.get("/items/delete/:id", (req, res) => {
-        storeservice.deletePostById(req.params.id).then(() => {
+        storeService.deletePostById(req.params.id).then(() => {
             res.redirect('/posts');
         }).catch((err) => {
             res.send("Unable to Remove Post / Post not found)", 500);
