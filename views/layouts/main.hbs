@@ -21,21 +21,38 @@
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="nav navbar-nav navbar-right">
+    {{#navLink "/items"}}Items{{/navLink}}
+    {{#navLink "/categories"}}Categories{{/navLink}}
+</ul>
+ {{#if session.user}}
+ <form class="navbar-form navbar-right">
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="userMenu" data-toggle="dropdown">
+            <span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;{{session.user.userName}}&nbsp;&nbsp;<span
+                class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="userMenu">
+            <li><a href="/userHistory">User History</a></li>
+            <li><a href="/logout">Log Out</a></li>
+        </ul>
+    </div>
+</form>
+<ul class="nav navbar-nav navbar-right">
+    {{#navLink "/items"}}Items{{/navLink}}
+    {{#navLink "/categories"}}Categories{{/navLink}}
+</ul>
+{{else}}
+<form class="navbar-form navbar-right">
+    <a href="/register" class="btn btn-success"><span class="glyphicon glyphicon-cog"></span>&nbsp;&nbsp;Register</a>
+    <a href="/login" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-right"></span>&nbsp;&nbsp;Log In</a>
+</form>
+{{/if}}
+
+
             <!-- Add ms-auto to push links to the right -->
             <ul class="navbar-nav ms-auto">
-    <li class="nav-item mx-2">
-        <a href="/Shop" class="nav-link">Shop</a>
-    </li>
-    <li class="nav-item mx-2">
-        <a href="/about" class="nav-link">About</a>
-    </li>
-    <li class="nav-item mx-2">
-        <a href="/categories" class="nav-link">Categories</a>
-    </li>
-    <li class="nav-item mx-2">
-        <a href="/items/add" class="nav-link">Add Items</a>
-    </li>
-</ul>
+    
 </div>
 
         </div>
